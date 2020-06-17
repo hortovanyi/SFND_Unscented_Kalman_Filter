@@ -20,14 +20,17 @@ public:
 	// Parameters 
 	// --------------------------------
 	// Set which cars to track with UKF
+	// std::vector<bool> trackCars = {false,false,true};
+	// std::vector<bool> trackCars = {true,false,false};
+	// std::vector<bool> trackCars = {false,true,false};
 	std::vector<bool> trackCars = {true,true,true};
 	// Visualize sensor measurements
 	bool visualize_lidar = true;
 	bool visualize_radar = true;
 	bool visualize_pcd = false;
 	// Predict path in the future using UKF
-	double projectedTime = 0;
-	int projectedSteps = 0;
+	double projectedTime = 1;
+	int projectedSteps = 4;
 	// --------------------------------
 
 	Highway(pcl::visualization::PCLVisualizer::Ptr& viewer)
@@ -140,7 +143,27 @@ public:
     			double v2 = sin(yaw)*v;
 				estimate << traffic[i].ukf.x_[0], traffic[i].ukf.x_[1], v1, v2;
 				tools.estimations.push_back(estimate);
-	
+
+				cout << "car: " << i << " ts: " << timestamp << " ";
+				// cout << endl;
+				cout << "ukf: ";
+				cout << traffic[i].ukf.x_[0] << " ";  // px
+				cout << traffic[i].ukf.x_[1] << " ";  // py
+				cout << traffic[i].ukf.x_[2] << " ";  // velocity 
+				cout << traffic[i].ukf.x_[3] << " ";  // yaw
+				cout << v1 <<" ";
+				cout << v2 <<" ";
+				// cout << endl;
+			 	
+				// cout << traffic[i].ukf.x_[4] << " ";  // yaw_dot
+				cout << " gt: ";
+				cout << traffic[i].position.x << " "; 
+				cout << traffic[i].position.y << " "; 
+				cout << traffic[i].velocity << " "; 
+				cout << traffic[i].angle << " "; 
+				cout << traffic[i].velocity*cos(traffic[i].angle) << " ";
+				cout << traffic[i].velocity*sin(traffic[i].angle) << " ";
+				cout << endl;
 			}
 		}
 		viewer->addText("Accuracy - RMSE:", 30, 300, 20, 1, 1, 1, "rmse");
@@ -156,21 +179,25 @@ public:
 			if(rmse[0] > rmseThreshold[0])
 			{
 				rmseFailLog[0] = rmse[0];
+				cout << "fail x: " << rmse[0] << endl;
 				pass = false;
 			}
 			if(rmse[1] > rmseThreshold[1])
 			{
 				rmseFailLog[1] = rmse[1];
+				cout << "fail y: " << rmse[1] << endl;
 				pass = false;
 			}
 			if(rmse[2] > rmseThreshold[2])
 			{
 				rmseFailLog[2] = rmse[2];
+				cout << "fail vx: " << rmse[2] << endl;
 				pass = false;
 			}
 			if(rmse[3] > rmseThreshold[3])
 			{
 				rmseFailLog[3] = rmse[3];
+				cout << "fail vy: " << rmse[3] << endl;
 				pass = false;
 			}
 		}

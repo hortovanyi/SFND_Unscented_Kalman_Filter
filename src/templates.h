@@ -16,11 +16,18 @@
 template<typename T>
 T normalizeRadiansPiToMinusPi(T rad) {
   static const T PI2 = 2.*M_PI;
+
+
   // Copy the sign of the value in radians to the value of pi.
-  T signed_pi = std::copysign(M_PI,rad);
+//   T signed_pi = std::copysign(M_PI,rad);
   // Set the value of difference to the appropriate signed value between pi and -pi.
-  rad = std::fmod(rad + signed_pi,(PI2)) - signed_pi;
-  return rad;
+//   T radn = std::fmod(rad + signed_pi,(PI2)) - signed_pi;
+
+    T radn = atan2(sin(rad),cos(rad)); 
+//   while(rad > M_PI) rad-=PI2;
+//   while(rad < -M_PI) rad+=PI2;
+
+  return radn;
 }
 
 

@@ -192,6 +192,7 @@ class UKF {
    * @param n_x State dimension
    * @param n_aug Augmentation dimension
    * @param n_z Measurement dimension, radar can measure r, phi, and r_dot
+   * @param is_radar Used to normalised phi
    * @param x State vector
    * @param P State covariance Matrix
    * @param Zsig sigma points in measurement space MatrixXd(n_z, 2 * n_aug + 1)
@@ -200,7 +201,7 @@ class UKF {
    * @param z vector for incoming measurement
    *
    */
-  tuple<VectorXd, MatrixXd> UpdateState(int n_x, int n_aug, int n_z,
+  tuple<VectorXd, MatrixXd> UpdateState(int n_x, int n_aug, int n_z, MeasurementPackage::SensorType sensor_type, 
                                         const MatrixXd& Xsig_pred,
                                         const VectorXd& x, const MatrixXd& P,
                                         const MatrixXd& Zsig,
@@ -231,7 +232,7 @@ class UKF {
                                         const MatrixXd& Zsig,
                                         const VectorXd& z_pred,
                                         const VectorXd& weights);
-  MatrixXd CrossCorrelationMatrix(int n_x, int n_aug, int n_z,
+  MatrixXd CrossCorrelationMatrix(int n_x, int n_aug, int n_z, 
                                   const MatrixXd& Zsig, const VectorXd& z_pred,
                                   const MatrixXd& Xsig_pred, const VectorXd& x,
                                   const VectorXd& weights);
